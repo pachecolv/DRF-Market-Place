@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  django-api:
+    image: market-place-api
+    container_name: market-place-api
+    ports:
+      - "8000:8000"
+    build:
+      context: .
+    # command: 'pipenv run python manage.py runserver 0.0.0.0:8000'
+    command: 'tail -f /dev/null'
+    depends_on:
+      - market-place-db
+    networks:
+      - market_place_network
+    working_dir: /django_api/market_place
+    tty: true
+    volumes:
+      - type: bind
+        source: ./django_api
+        target: /django_api
+      - /django_api/.venv
+
+
+  market-place-db:
+    image: postgres:12
+    container_name: market-place-db
+    ports:
+      - "54327:5432"
+    volumes:
+      - type: volume
+        source: dbdata
+        target: /var/lib/postgresql
+    networks:
+      - market_place_network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+volumes:
+  dbdata:
+    name: market-place-db-data
+
+networks:
+  market_place_network:
+    name: market_place_network
