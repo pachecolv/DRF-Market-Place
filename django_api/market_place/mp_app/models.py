@@ -1,15 +1,24 @@
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.timezone import now
+
 # Create your models here
 
 class Buyer(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='buyer',
+        on_delete=models.CASCADE
+    )
 
 class Seller(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(default=now())
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='seller',
+        on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(default=now)
     bio = models.TextField(null=True)     
 
 
@@ -27,7 +36,7 @@ class Transaction(models.Model):
     seller = models.ForeignKey('Seller', on_delete=models.CASCADE)
     buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE)
     total_amount = models.FloatField()
-    timestamp = models.DateTimeField(default=now())
+    timestamp = models.DateTimeField(default=now)
 
 
 class TransactionItem(models.Model):
@@ -39,10 +48,10 @@ class TransactionItem(models.Model):
 class SellerBalance(models.Model):
     seller = models.ForeignKey('Seller', on_delete=models.CASCADE)
     balance = models.FloatField()
-    timestamp = models.DateTimeField(default=now())
+    timestamp = models.DateTimeField(default=now)
 
 
 class WishList(models.Model):
     buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(default=now())
+    timestamp = models.DateTimeField(default=now)
