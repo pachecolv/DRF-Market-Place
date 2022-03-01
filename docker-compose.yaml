@@ -8,8 +8,7 @@ services:
       - "8000:8000"
     build:
       context: .
-    # command: 'pipenv run python manage.py runserver 0.0.0.0:8000'
-    command: 'tail -f /dev/null'
+    command: 'pipenv run python manage.py runserver 0.0.0.0:8000'
     depends_on:
       - market-place-db
     networks:
