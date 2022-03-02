@@ -6,6 +6,7 @@ from rest_framework import status
 from mp_app.models import Product
 from mp_app.models import SellerBalance
 from mp_app.serializers import TransactionSerializer
+from .utils import get_buyer
 
 class BuyProduct(APIView):
 
@@ -24,7 +25,8 @@ class BuyProduct(APIView):
 
 
     def post(self, request, pk):
-        buyer = request.user.buyer.get()
+        buyer = get_buyer(request)
+
         try:
             product = Product.objects.get(pk=pk)
         except Product.DoesNotExist:

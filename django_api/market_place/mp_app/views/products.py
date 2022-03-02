@@ -5,8 +5,9 @@ from rest_framework import status
 
 
 from mp_app.models import Product 
+from mp_app.permissions import isProductSeller
 from mp_app.serializers import ProductSerializer
-
+from .utils import get_seller
 
 class ProductsList(APIView):
 
@@ -17,7 +18,7 @@ class ProductsList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        seller = request.user.seller.get()
+        seller = get_seller(request)
 
         serializer = ProductSerializer(data=request.data)
         if not serializer.is_valid():
@@ -28,6 +29,7 @@ class ProductsList(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class ProductDetail(APIView):
+    permission_classes = [isProductSeller]
 
     def get(self, request, pk, format=None):
         try:
@@ -40,9 +42,11 @@ class ProductDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        seller = request.user.seller.get()
+        seller = get_seller(request)
 
         product = Product.objects.get(pk=pk)
+        self.check_object_permissions(request, product)
+
         serializer = ProductSerializer(product, request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

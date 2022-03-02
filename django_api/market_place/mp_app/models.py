@@ -59,5 +59,5 @@ class SellerBalance(models.Model):
 
 class WishList(models.Model):
     buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, unique=True)
     timestamp = models.DateTimeField(default=now)

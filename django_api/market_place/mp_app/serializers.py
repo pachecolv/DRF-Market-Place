@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
-from .models import Product, Seller, Transaction
-
+from .models import Product
+from .models import Seller
+from .models import Transaction
+from .models import WishList
 
 class SignUpSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=200)
@@ -62,3 +64,22 @@ class TransactionSerializer(serializers.ModelSerializer):
             total_amount=total_amount 
         )
 
+
+class WishListSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField(source='product.id', read_only=True)
+    product_name = serializers.CharField(source='product.name', read_only=True)
+    product_description = serializers.CharField(source='product.description', read_only=True)
+    product_price = serializers.FloatField(source='product.price', read_only=True)
+
+    class Meta:
+        model = WishList
+        fields = ['product_id', 'product_name', 'product_description', 'product_price']
+
+    def create(self, validated_data):
+        print('got here')
+        print(validated_data['buyer'])
+
+        return WishList.objects.create(
+            buyer=validated_data['buyer'],
+            product=validated_data['product']
+        )
