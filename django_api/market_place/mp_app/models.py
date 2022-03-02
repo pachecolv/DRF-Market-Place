@@ -18,6 +18,7 @@ class Seller(models.Model):
         related_name='seller',
         on_delete=models.CASCADE
     )
+    display_name = models.CharField(max_length=200, default='')
     created_at = models.DateTimeField(default=now)
     bio = models.TextField(null=True)     
 
@@ -29,12 +30,17 @@ class Product(models.Model):
     price = models.FloatField()
     qty_available = models.PositiveIntegerField(default=0)
     max_qty_customer = models.PositiveIntegerField(default=None, null=True)
-    hidden = models.BooleanField()
 
 
 class Transaction(models.Model):
-    seller = models.ForeignKey('Seller', on_delete=models.CASCADE)
     buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        'Product',
+        related_name='transaction',
+        on_delete=models.CASCADE, 
+    )
+    qty = models.PositiveIntegerField()
+    unity_price = models.FloatField()
     total_amount = models.FloatField()
     timestamp = models.DateTimeField(default=now)
 
