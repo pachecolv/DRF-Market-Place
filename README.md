@@ -1,5 +1,5 @@
 # DRF-Market-Place
-Market place implementation using django rest framework (DRF)
+Market place implementation using django rest framework (DRF) and a Postgres database.
 
 An user can sign up either as a buyer or a seller. Sellers can add to the platform products they would like to sell.
 The buyers can see all products in the market place and decide which one they would like to purchase.
