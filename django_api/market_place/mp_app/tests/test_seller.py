@@ -147,5 +147,3 @@ class TestSellerProducts(APITestCase):
         self.assertFalse(
             next((x for x in response.data if x['id'] == self.product_3.id), False)
         )
-
-        print(response.data)
