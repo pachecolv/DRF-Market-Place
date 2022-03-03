@@ -37,3 +37,47 @@ docker exec -it market-place-api pipenv run python manage.py test
 
 This project uses JWT tokens for authentication. The token is required for all endpoints, except for signing up.
 An access token can be obtained through the `/token/` endpoint. A refresh token endpoint is implemented at `/token/refresh/`.
+
+## Endpoints
+
+**Sign up**\
+POST BASE_URL/signup/ \
+Payload:
+- username
+- email
+- password
+- is_seller: true for sellers and false for buyers
+
+**Get Token**\
+POST BASE_URL/token/ \
+Payload:
+- username
+- password
+
+**Get Seller Info**\
+GET BASE_URL/seller/ \
+Returns:
+- username
+- email
+- display_name (name displayed to buyers)
+- bio (a description about the seller, optional)
+- created_at
+
+Remark: display_name and bio are set to empty strings when a seller is created and can be updated at any moment.
+
+**Update Seller Info**\
+PUT BASE_URL/seller/ \
+Payload (at least one of the fields bellow):
+- display_name
+- bio
+
+**Seller's Products** \
+GET BASE_URL/seller/products/ \
+
+Returns all products a seller has added to the market place
+
+**Get all products** \
+ GET BASE_URL/products/ \
+ 
+ Returns all products available in the market place.
+
