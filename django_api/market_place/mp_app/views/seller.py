@@ -2,8 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from mp_app.serializers import SellerSerializer
 from .utils import get_seller
+from mp_app.models import Product
+from mp_app.serializers import SellerSerializer
+from mp_app.serializers import ProductSerializer
 
 class SellerDetail(APIView):
 
@@ -21,5 +23,14 @@ class SellerDetail(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         serializer.save()
+
+        return Response(serializer.data)
+
+class SellerProducts(APIView):
+
+    def get(self, request, format=None):
+        seller = get_seller(request)
+        products = Product.objects.filter(seller=seller)
+        serializer = ProductSerializer(products, many=True)
 
         return Response(serializer.data)
